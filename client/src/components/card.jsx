@@ -1,7 +1,13 @@
-import React from 'react'
+import React from "react";
 
-export const Card = () => {
+export const Card = ({ TodoList }) => {
   return (
-    <div>Card</div>
-  )
-}
+    <div>
+      <ul>
+        {TodoList.map((todo) => {
+          return <li key={todo.id}>{todo.content}</li>;
+        })}
+      </ul>
+    </div>
+  );
+};
