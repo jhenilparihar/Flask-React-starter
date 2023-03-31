@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, json, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -26,6 +26,17 @@ def todo_serializer(todo):
 def index():
     todo = TodoModel.query.all()
     return jsonify([*map(todo_serializer, todo)])
+
+
+@app.route('/api/create', methods=['POST'])
+def create():
+    request_data = json.loads(request.data)
+    todo = TodoModel(content=request_data['content'])
+
+    db.session.add(todo)
+    db.session.commit()
+
+    return {'201': 'Todo created successfully!'}
 
 
 if __name__ == '__main__':
