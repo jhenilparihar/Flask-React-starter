@@ -39,5 +39,23 @@ def create():
     return {'201': 'Todo created successfully!'}
 
 
+@app.route('/api/<int:id>')
+def show(id):
+    return jsonify([*map(todo_serializer, TodoModel.query.filter_by(id=id))])
+
+
+@app.route('/api/<int:id>/delete', methods=['DELETE'])
+def delete(id):
+    todo = db.get_or_404(TodoModel, id)
+
+    if request.method == "DELETE":
+        db.session.delete(todo)
+        db.session.commit()
+
+        return {"251": "Todo deleted succefullt!"}
+
+    return jsonify([*map(todo_serializer, TodoModel.query.filter_by(id=id))])
+
+
 if __name__ == '__main__':
     app.run(debug=True)
